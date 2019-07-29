@@ -1,0 +1,23 @@
+## Use the jupyter notebook container version below. Any newer and the matplotlib backend 
+#  will have plotting issues with space between horizontal bars in dense state charts
+#FROM jupyter/datascience-notebook
+FROM tensorflow/tensorflow:latest-gpu-py3-jupyter
+MAINTAINER dyec@us.ibm.com
+
+# Install additional reporting packages (FPDF)
+RUN pip install --upgrade pip && pip install fpdf simplejson \
+        beautifulsoup4 elasticsearch elasticsearch_dsl requests \
+        tensorflow-gpu keras tqdm Pillow
+
+# -m option creates a fake writable home folder for Jupyter.
+RUN groupadd -g 1000 jupyter && \
+    useradd -m -r -u 1000 -g jupyter jupyter
+USER jupyter
+
+VOLUME ["/home/jupyter/work"]
+WORKDIR /home/jupyter/work
+
+CMD ["jupyter", "notebook", "--no-browser", "--ip=0.0.0.0", "/home/jupyter/work"]
+
+# Build command
+# docker build -f Dockerfile.notebook -t ${IMAGENAME} .
