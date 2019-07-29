@@ -7,17 +7,17 @@ MAINTAINER dyec@us.ibm.com
 # Install additional reporting packages (FPDF)
 RUN pip install --upgrade pip && pip install fpdf simplejson \
         beautifulsoup4 elasticsearch elasticsearch_dsl requests \
-        tensorflow-gpu keras tqdm Pillow
+        pandas scikit-learn tensorflow-gpu keras tqdm Pillow
 
 # -m option creates a fake writable home folder for Jupyter.
-RUN groupadd -g 1000 jupyter && \
-    useradd -m -r -u 1000 -g jupyter jupyter
-USER jupyter
+RUN groupadd -g 1000 cogwerx && \
+    useradd -m -r -u 1000 -g cogwerx cogwerx
+USER cogwerx
 
-VOLUME ["/home/jupyter/work"]
-WORKDIR /home/jupyter/work
+VOLUME ["/notebooks"]
+WORKDIR /noteboooks
 
-CMD ["jupyter", "notebook", "--no-browser", "--ip=0.0.0.0", "/home/jupyter/work"]
+CMD ["jupyter", "notebook", "--no-browser", "--ip=0.0.0.0", "/notebooks"]
 
 # Build command
 # docker build -f Dockerfile.notebook -t ${IMAGENAME} .

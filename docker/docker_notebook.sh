@@ -6,12 +6,9 @@ CONTAINERNAME=notebook-tf-gpu$1
 ## See all tag variants at https://hub.docker.com/r/tensorflow/tensorflow/tags/
 export IMAGENAME=pocketprotectors/datascience-ml-notebook-tf-gpu:latest 
 
-# make sure we have the latest container image
-docker pull $IMAGENAME
-
 HERE="$( cd "$( dirname "$0" )" && pwd )"
 CONVERTPATH="$(dirname $HERE)/$(basename $HERE)"
-docker run --runtime=nvidia --rm --name ${CONTAINERNAME} --privileged -d -p 127.0.0.1:8888:8888 -v ${CONVERTPATH}/..:/home/jupyter/work ${IMAGENAME}
+docker run --runtime=nvidia --rm --name ${CONTAINERNAME} --privileged -d -p 127.0.0.1:8888:8888 -v ${CONVERTPATH}/../notebooks:/notebooks ${IMAGENAME}
 
 sleep 3
 # Get the notebook token (paste into token prompt in browser)
