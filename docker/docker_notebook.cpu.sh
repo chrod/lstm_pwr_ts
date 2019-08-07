@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Can pass in a suffix to be attached to the container name (for multiple notebooks)
+CONTAINERNAME=notebook-tf-cpu$1
+
+## See all tag variants at https://hub.docker.com/r/tensorflow/tensorflow/tags/
+export IMAGENAME=pocketprotectors/datascience-ml-notebook-tf-cpu:latest 
+
+HERE="$( cd "$( dirname "$0" )" && pwd )"
+CONVERTPATH="$(dirname $HERE)/$(basename $HERE)"
+docker run --rm --name ${CONTAINERNAME} --privileged -d -p 127.0.0.1:8888:8888 -v ${CONVERTPATH}/../notebooks:/notebooks ${IMAGENAME}
+
+sleep 3
+# Get the notebook token (paste into token prompt in browser)
+tokenstr=$(docker exec ${CONTAINERNAME} jupyter notebook list | grep token | cut -d' ' -f1)
+echo "To access genctl charting notebook:"
+echo "Visit: ${tokenstr[0]}"
+echo "  and navigate to work/*.ipynb"
